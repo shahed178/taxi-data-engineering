@@ -1,3 +1,4 @@
+import os
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime
@@ -23,8 +24,7 @@ def transform_data():
     print("Transform completed")
 
 def load_data():
-    engine = create_engine("postgresql://postgres:password@postgres:5432/taxi_db")
-
+    engine = create_engine(os.environ["DATABASE_URL"])
     df = pd.read_parquet("/opt/airflow/parquet/taxi_data.parquet")
 
     df.to_sql(
